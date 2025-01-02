@@ -1,4 +1,4 @@
-import  { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { chipImg, frameImg, frameVideo } from '../utils';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
@@ -24,6 +24,24 @@ const HowItWorks = () => {
       duration: 1,
       ease: 'power2.inOut'
     });
+  }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+
+    if (video) {
+      const handleVideoEnd = () => {
+        video.currentTime = 0; // Set ke awal video
+        video.play(); // Putar ulang video
+      };
+
+      video.addEventListener('ended', handleVideoEnd);
+
+      // Bersihkan event listener saat komponen dilepas
+      return () => {
+        video.removeEventListener('ended', handleVideoEnd);
+      };
+    }
   }, []);
   return (
     <section className="common-padding ">
@@ -84,8 +102,9 @@ const HowItWorks = () => {
               <span className="text-white">
                 games will look and feel so immersive
               </span>
-              , with incredibly detailed environments and characters.
-              And with industry-leading speed and efficiency, A17 Pro takes fast and runs with it.
+              , with incredibly detailed environments and characters. And with
+              industry-leading speed and efficiency, A17 Pro takes fast and runs
+              with it.
             </p>
           </div>
 
